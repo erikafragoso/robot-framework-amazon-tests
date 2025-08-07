@@ -1,0 +1,57 @@
+name: Environment Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to test'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+        - dev
+        - hom
+        - prod
+
+jobs:
+  environment-tests:
+    name: Tests for ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        
+    - name: Install Chrome
+      run: |
+        wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
+        echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+        apt-get update
+        apt-get install -y google-chrome-stable
+        
+    - name: Install ChromeDriver
+      run: |
+        CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | awk -F'.' '{print $1}')
+        wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION/chromedriver_linux64.zip
+        unzip /tmp/chromedriver.zip -d /usr/local/bin/
+        chmod +x /usr/local/bin/chromedriver
+        
+    - name: Run Tests for ${{ github.event.inputs.environment }}
+      run: |
+        robot --outputdir results --timestampoutputs -v ENVIRONMENT:${{ github.event.inputs.environment }} tests/amazon_tests.robot
+        
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: ${{ github.event.inputs.environment }}-test-results
+        path: results/ 

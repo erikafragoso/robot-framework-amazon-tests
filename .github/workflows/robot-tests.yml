@@ -1,0 +1,148 @@
+name: Robot Framework Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Executa todos os dias às 6h da manhã
+    - cron: '0 6 * * *'
+
+jobs:
+  smoke-tests:
+    name: Smoke Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Install Chrome
+      run: |
+        wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
+        echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+        apt-get update
+        apt-get install -y google-chrome-stable
+        
+    - name: Install ChromeDriver
+      run: |
+        CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | awk -F'.' '{print $1}')
+        wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION/chromedriver_linux64.zip
+        unzip /tmp/chromedriver.zip -d /usr/local/bin/
+        chmod +x /usr/local/bin/chromedriver
+        
+    - name: Install Robot Framework
+      run: |
+        pip install robotframework
+        pip install robotframework-seleniumlibrary
+        pip install robotframework-robocop
+        
+    - name: Run Smoke Tests
+      run: |
+        robot --outputdir results --timestampoutputs --include smoke tests/amazon_tests.robot
+        
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: smoke-test-results
+        path: results/
+        
+    - name: Publish test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: robot-results
+        path: |
+          results/*.html
+          results/*.xml
+          results/*.log
+
+  regression-tests:
+    name: Regression Tests
+    runs-on: ubuntu-latest
+    needs: smoke-tests
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Install Chrome
+      run: |
+        wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
+        echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+        apt-get update
+        apt-get install -y google-chrome-stable
+        
+    - name: Install ChromeDriver
+      run: |
+        CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | awk -F'.' '{print $1}')
+        wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION/chromedriver_linux64.zip
+        unzip /tmp/chromedriver.zip -d /usr/local/bin/
+        chmod +x /usr/local/bin/chromedriver
+        
+    - name: Install Robot Framework
+      run: |
+        pip install robotframework
+        pip install robotframework-seleniumlibrary
+        pip install robotframework-robocop
+        
+    - name: Run Regression Tests
+      run: |
+        robot --outputdir results --timestampoutputs --include regressao tests/amazon_tests.robot
+        
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: regression-test-results
+        path: results/
+        
+    - name: Publish test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: robot-results
+        path: |
+          results/*.html
+          results/*.xml
+          results/*.log
+
+  code-quality:
+    name: Code Quality Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Install Robocop
+      run: |
+        pip install robotframework-robocop
+        
+    - name: Run Robocop
+      run: |
+        robocop --output results/robocop_report.txt resources/ tests/
+        
+    - name: Upload code quality report
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: code-quality-report
+        path: results/robocop_report.txt 

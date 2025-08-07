@@ -16,8 +16,48 @@ Robotframework/
 │   ├── logs/
 │   ├── reports/
 │   └── screenshots/
+├── .github/workflows/  # Pipelines CI/CD
+│   ├── robot-tests.yml # Pipeline completa
+│   ├── quick-tests.yml # Pipeline rápida
+│   └── environment-tests.yml # Pipeline por ambiente
 └── libraries/          # Bibliotecas customizadas
 ```
+
+## CI/CD Pipelines
+
+### 🚀 Pipelines Automáticas
+
+O projeto possui 3 pipelines configuradas no GitHub Actions:
+
+#### 1. **Pipeline Completa** (`robot-tests.yml`)
+- **Trigger**: Push/Pull Request na main + Schedule diário (6h)
+- **Jobs**:
+  - Smoke Tests (testes básicos)
+  - Regression Tests (testes completos)
+  - Code Quality Check (Robocop)
+
+#### 2. **Pipeline Rápida** (`quick-tests.yml`)
+- **Trigger**: Push/Pull Request na main
+- **Jobs**: Apenas testes de alta prioridade
+- **Tempo**: ~2-3 minutos
+
+#### 3. **Pipeline por Ambiente** (`environment-tests.yml`)
+- **Trigger**: Manual (workflow_dispatch)
+- **Jobs**: Testes específicos por ambiente (dev/hom/prod)
+
+### 📊 Como Acessar os Resultados
+
+1. **GitHub Actions**: Vá para a aba "Actions" no seu repositório
+2. **Artifacts**: Baixe os relatórios HTML/XML após cada execução
+3. **Logs**: Veja os logs detalhados de cada job
+
+### 🔧 Como Executar Manualmente
+
+1. Vá para **Actions** no GitHub
+2. Clique em **Environment Tests**
+3. Clique em **Run workflow**
+4. Selecione o ambiente (dev/hom/prod)
+5. Clique em **Run workflow**
 
 ## Como Executar
 
@@ -107,4 +147,16 @@ robot --exclude performance tests/amazon_tests.robot
 Após a execução, os relatórios estarão disponíveis em:
 - `results/log.html`: Log detalhado
 - `results/report.html`: Relatório de execução
-- `results/output.xml`: Dados em XML 
+- `results/output.xml`: Dados em XML
+
+## Dependências
+
+```bash
+pip install -r requirements.txt
+```
+
+### Dependências Principais:
+- `robotframework==6.1.1`
+- `robotframework-seleniumlibrary==6.2.0`
+- `robotframework-robocop==3.0.0`
+- `selenium==4.15.2` 
