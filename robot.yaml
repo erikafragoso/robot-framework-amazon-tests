@@ -1,0 +1,21 @@
+robot:
+  # Configurações gerais
+  outputdir: results
+  timestampoutputs: true
+  loglevel: INFO
+  
+  # Configurações de execução
+  include:
+    - smoke
+    - regressao
+  
+  # Configurações de ambiente
+  variables:
+    ENVIRONMENT: dev
+    BROWSER: chrome
+    TIMEOUT: 10s
+  
+  # Configurações de relatório
+  report: report.html
+  log: log.html
+  output: output.xml 

@@ -1,0 +1,42 @@
+# Resultados dos testes
+results/
+*.html
+*.xml
+*.log
+
+# Screenshots
+*.png
+*.jpg
+*.jpeg
+
+# Logs do navegador
+geckodriver*.log
+chromedriver*.log
+
+# Arquivos temporários
+*.tmp
+*.temp
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos de configuração local
+.env
+config_local.robot
+
+# Cache do Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo 
