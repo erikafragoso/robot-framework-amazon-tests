@@ -41,20 +41,7 @@ jobs:
         pip install webdriver-manager
         
         # Baixar ChromeDriver usando webdriver-manager
-        python3 -c "
-import os
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-
-# Baixar ChromeDriver compatível
-driver_path = ChromeDriverManager().install()
-print(f'ChromeDriver installed at: {driver_path}')
-
-# Copiar para /usr/local/bin
-os.system(f'cp {driver_path} /usr/local/bin/chromedriver')
-os.system('chmod +x /usr/local/bin/chromedriver')
-"
+        python3 -c "import os; from webdriver_manager.chrome import ChromeDriverManager; driver_path = ChromeDriverManager().install(); print(f'ChromeDriver installed at: {driver_path}'); os.system(f'cp {driver_path} /usr/local/bin/chromedriver'); os.system('chmod +x /usr/local/bin/chromedriver')"
         
         # Verificar se o ChromeDriver foi instalado corretamente
         chromedriver --version
@@ -118,20 +105,7 @@ os.system('chmod +x /usr/local/bin/chromedriver')
         pip install webdriver-manager
         
         # Baixar ChromeDriver usando webdriver-manager
-        python3 -c "
-import os
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-
-# Baixar ChromeDriver compatível
-driver_path = ChromeDriverManager().install()
-print(f'ChromeDriver installed at: {driver_path}')
-
-# Copiar para /usr/local/bin
-os.system(f'cp {driver_path} /usr/local/bin/chromedriver')
-os.system('chmod +x /usr/local/bin/chromedriver')
-"
+        python3 -c "import os; from webdriver_manager.chrome import ChromeDriverManager; driver_path = ChromeDriverManager().install(); print(f'ChromeDriver installed at: {driver_path}'); os.system(f'cp {driver_path} /usr/local/bin/chromedriver'); os.system('chmod +x /usr/local/bin/chromedriver')"
         
         # Verificar se o ChromeDriver foi instalado corretamente
         chromedriver --version
