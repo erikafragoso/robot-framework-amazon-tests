@@ -1,18 +1,19 @@
 *** Settings ***
 Library    SeleniumLibrary
 Resource    amazon_page.robot
+Library    BuiltIn
 
 *** Variables ***
 ${ENVIRONMENT}    dev
 ${BROWSER}    chrome
 ${TIMEOUT}    10s
-${CHROME ARGS STRING}    %{SELENIUM_CHROME_ARGS}
+${CHROME ARGS STRING}    Get Environment Variable    SELENIUM_CHROME_ARGS    ''
 *** Keywords ***
 Abrir o navegador
     [Documentation]    Abre o navegador Chrome e maximiza a janela
     [Arguments]    ${url}
     ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
-    ${args}=    Split String    ${CHROME ARGS STRING}    ${SPACE}
+    ${args}=    Create List
     FOR    ${arg}    IN    @{args}
         Run Keyword If    '${arg}' != ''    Call Method    ${options}    add_argument    ${arg}
     END
