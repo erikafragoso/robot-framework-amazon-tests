@@ -48,14 +48,14 @@ jobs:
         robot --outputdir results --timestampoutputs --include smoke tests/amazon_tests.robot
         
     - name: Upload test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: smoke-test-results
         path: results/
         
     - name: Publish test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: robot-results
@@ -103,14 +103,14 @@ jobs:
         robot --outputdir results --timestampoutputs --include regressao tests/amazon_tests.robot
         
     - name: Upload test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: regression-test-results
         path: results/
         
     - name: Publish test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: robot-results
@@ -141,7 +141,7 @@ jobs:
         robocop --output results/robocop_report.txt resources/ tests/
         
     - name: Upload code quality report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: code-quality-report
