@@ -14,7 +14,8 @@ Abrir o navegador
     [Arguments]    ${url}
     ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
     ${tmpdir}=    Evaluate    __import__('tempfile').mkdtemp()    # Python
-    Call Method    ${options}    add_argument    --user-data-dir=${tmpdir}
+    ${user_data_dir}=    Catenate    --user-data-dir=    ${tmpdir}
+    Call Method    ${options}    add_argument    ${user_data_dir}
     Open Browser    ${url}    chrome    options=${options}
     Maximize Browser Window
     Set Selenium Timeout    ${TIMEOUT}

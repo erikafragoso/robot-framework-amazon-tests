@@ -1,0 +1,4 @@
+2025/08/08-16:24:44.632 4 Creating DB /home/erika/Documentos/Projetos/Cursor/Robotframework/ /tmp/tmp_ijme9pp/Default/Local Storage/leveldb since it was missing.
+2025/08/08-16:24:44.650 4 Reusing MANIFEST /home/erika/Documentos/Projetos/Cursor/Robotframework/ /tmp/tmp_ijme9pp/Default/Local Storage/leveldb/MANIFEST-000001
+2025/08/08-16:24:52.603 4 Level-0 table #5: started
+2025/08/08-16:24:52.615 4 Level-0 table #5: 31390 bytes OK
