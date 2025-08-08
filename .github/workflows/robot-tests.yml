@@ -39,8 +39,10 @@ jobs:
         
         # Download ChromeDriver usando o método mais robusto
         CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
-        if [ -z "$CHROMEDRIVER_VERSION" ]; then
-          echo "Falling back to latest ChromeDriver version"
+        
+        # Verificar se a resposta contém erro XML ou está vazia
+        if [[ "$CHROMEDRIVER_VERSION" == *"<?xml"* ]] || [[ -z "$CHROMEDRIVER_VERSION" ]]; then
+          echo "Versão específica não encontrada, usando versão mais recente..."
           CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE")
         fi
         
@@ -106,8 +108,10 @@ jobs:
         
         # Download ChromeDriver usando o método mais robusto
         CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
-        if [ -z "$CHROMEDRIVER_VERSION" ]; then
-          echo "Falling back to latest ChromeDriver version"
+        
+        # Verificar se a resposta contém erro XML ou está vazia
+        if [[ "$CHROMEDRIVER_VERSION" == *"<?xml"* ]] || [[ -z "$CHROMEDRIVER_VERSION" ]]; then
+          echo "Versão específica não encontrada, usando versão mais recente..."
           CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE")
         fi
         
