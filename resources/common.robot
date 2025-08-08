@@ -6,12 +6,12 @@ Resource    amazon_page.robot
 ${ENVIRONMENT}    dev
 ${BROWSER}    chrome
 ${TIMEOUT}    10s
-
+${CHROME ARGS}    %{SELENIUM_CHROME_ARGS}
 *** Keywords ***
 Abrir o navegador
     [Documentation]    Abre o navegador Chrome e maximiza a janela
     [Arguments]    ${url}
-    Open Browser    ${url}    browser=${BROWSER}
+    Open Browser    ${url}    browser=${BROWSER}    options=${CHROME ARGS}
     Maximize Browser Window
     Set Selenium Timeout    ${TIMEOUT}
 
