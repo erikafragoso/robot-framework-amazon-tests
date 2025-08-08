@@ -13,10 +13,8 @@ Abrir o navegador
     [Documentation]    Abre o navegador Chrome e maximiza a janela
     [Arguments]    ${url}
     ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
-    ${args}=    Create List
-    FOR    ${arg}    IN    @{args}
-        Run Keyword If    '${arg}' != ''    Call Method    ${options}    add_argument    ${arg}
-    END
+    ${tmpdir}=    Evaluate    __import__('tempfile').mkdtemp()    # Python
+    Call Method    ${options}    add_argument    --user-data-dir=${tmpdir}
     Open Browser    ${url}    chrome    options=${options}
     Maximize Browser Window
     Set Selenium Timeout    ${TIMEOUT}
