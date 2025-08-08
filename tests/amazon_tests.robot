@@ -26,7 +26,7 @@ Teste de Verificação de Título da Página
     
     Acessar a home page do site Amazon.com.br
 
-# ===== TESTES DE REGRESSÃO =====
+# ===== TESTES DE REGRESSÃO =====    
 Teste Completo de Navegação Amazon
     [Documentation]    Teste completo de navegação e verificação de elementos
     [Tags]    regressao    amazon    navegacao_completa    prioridade_alta

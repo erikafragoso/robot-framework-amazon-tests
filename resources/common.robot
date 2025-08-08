@@ -6,12 +6,17 @@ Resource    amazon_page.robot
 ${ENVIRONMENT}    dev
 ${BROWSER}    chrome
 ${TIMEOUT}    10s
-${CHROME ARGS}    %{SELENIUM_CHROME_ARGS}
+${CHROME ARGS STRING}    %{SELENIUM_CHROME_ARGS}
 *** Keywords ***
 Abrir o navegador
     [Documentation]    Abre o navegador Chrome e maximiza a janela
     [Arguments]    ${url}
-    Open Browser    ${url}    browser=${BROWSER}    options=${CHROME ARGS}
+    ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
+    ${args}=    Split String    ${CHROME ARGS STRING}    ${SPACE}
+    FOR    ${arg}    IN    @{args}
+        Run Keyword If    '${arg}' != ''    Call Method    ${options}    add_argument    ${arg}
+    END
+    Open Browser    ${url}    chrome    options=${options}
     Maximize Browser Window
     Set Selenium Timeout    ${TIMEOUT}
 
