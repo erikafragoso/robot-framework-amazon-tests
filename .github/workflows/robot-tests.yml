@@ -37,19 +37,44 @@ jobs:
         CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | awk -F'.' '{print $1}')
         echo "Chrome version: $CHROME_VERSION"
         
-        # Download ChromeDriver usando o método mais robusto
-        CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+        # Tentar diferentes métodos para obter a versão correta do ChromeDriver
+        CHROMEDRIVER_VERSION=""
         
-        # Verificar se a resposta contém erro XML ou está vazia
-        if [[ "$CHROMEDRIVER_VERSION" == *"<?xml"* ]] || [[ -z "$CHROMEDRIVER_VERSION" ]]; then
-          echo "Versão específica não encontrada, usando versão mais recente..."
+        # Método 1: Tentar versão específica
+        TEMP_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+        if [[ ! "$TEMP_VERSION" == *"<?xml"* ]] && [[ ! -z "$TEMP_VERSION" ]]; then
+          CHROMEDRIVER_VERSION=$TEMP_VERSION
+          echo "Found specific version: $CHROMEDRIVER_VERSION"
+        fi
+        
+        # Método 2: Se não encontrou, tentar versão mais próxima
+        if [[ -z "$CHROMEDRIVER_VERSION" ]]; then
+          echo "Trying to find compatible version..."
+          # Tentar versões próximas (139 -> 138, 137, etc.)
+          for i in {1..10}; do
+            TRY_VERSION=$((CHROME_VERSION - i))
+            TEMP_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$TRY_VERSION")
+            if [[ ! "$TEMP_VERSION" == *"<?xml"* ]] && [[ ! -z "$TEMP_VERSION" ]]; then
+              CHROMEDRIVER_VERSION=$TEMP_VERSION
+              echo "Found compatible version: $CHROMEDRIVER_VERSION (for Chrome $TRY_VERSION)"
+              break
+            fi
+          done
+        fi
+        
+        # Método 3: Se ainda não encontrou, usar versão mais recente
+        if [[ -z "$CHROMEDRIVER_VERSION" ]]; then
+          echo "Using latest version..."
           CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE")
         fi
         
-        echo "ChromeDriver version: $CHROMEDRIVER_VERSION"
+        echo "Final ChromeDriver version: $CHROMEDRIVER_VERSION"
         wget -O /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
         unzip /tmp/chromedriver.zip -d /usr/local/bin/
         chmod +x /usr/local/bin/chromedriver
+        
+        # Verificar se o ChromeDriver foi instalado corretamente
+        chromedriver --version
         
     - name: Install Robot Framework
       run: |
@@ -106,19 +131,44 @@ jobs:
         CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | awk -F'.' '{print $1}')
         echo "Chrome version: $CHROME_VERSION"
         
-        # Download ChromeDriver usando o método mais robusto
-        CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+        # Tentar diferentes métodos para obter a versão correta do ChromeDriver
+        CHROMEDRIVER_VERSION=""
         
-        # Verificar se a resposta contém erro XML ou está vazia
-        if [[ "$CHROMEDRIVER_VERSION" == *"<?xml"* ]] || [[ -z "$CHROMEDRIVER_VERSION" ]]; then
-          echo "Versão específica não encontrada, usando versão mais recente..."
+        # Método 1: Tentar versão específica
+        TEMP_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+        if [[ ! "$TEMP_VERSION" == *"<?xml"* ]] && [[ ! -z "$TEMP_VERSION" ]]; then
+          CHROMEDRIVER_VERSION=$TEMP_VERSION
+          echo "Found specific version: $CHROMEDRIVER_VERSION"
+        fi
+        
+        # Método 2: Se não encontrou, tentar versão mais próxima
+        if [[ -z "$CHROMEDRIVER_VERSION" ]]; then
+          echo "Trying to find compatible version..."
+          # Tentar versões próximas (139 -> 138, 137, etc.)
+          for i in {1..10}; do
+            TRY_VERSION=$((CHROME_VERSION - i))
+            TEMP_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$TRY_VERSION")
+            if [[ ! "$TEMP_VERSION" == *"<?xml"* ]] && [[ ! -z "$TEMP_VERSION" ]]; then
+              CHROMEDRIVER_VERSION=$TEMP_VERSION
+              echo "Found compatible version: $CHROMEDRIVER_VERSION (for Chrome $TRY_VERSION)"
+              break
+            fi
+          done
+        fi
+        
+        # Método 3: Se ainda não encontrou, usar versão mais recente
+        if [[ -z "$CHROMEDRIVER_VERSION" ]]; then
+          echo "Using latest version..."
           CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE")
         fi
         
-        echo "ChromeDriver version: $CHROMEDRIVER_VERSION"
+        echo "Final ChromeDriver version: $CHROMEDRIVER_VERSION"
         wget -O /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
         unzip /tmp/chromedriver.zip -d /usr/local/bin/
         chmod +x /usr/local/bin/chromedriver
+        
+        # Verificar se o ChromeDriver foi instalado corretamente
+        chromedriver --version
         
     - name: Install Robot Framework
       run: |
