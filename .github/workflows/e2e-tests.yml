@@ -73,7 +73,9 @@ jobs:
       - name: Run Robot Framework tests
         env:
           CI: true
+          SELENIUM_CHROME_ARGS: "--headless=new --no-sandbox --disable-dev-shm-usage --user-data-dir=/tmp/chrome-profile"
         run: |
+          mkdir -p /tmp/chrome-profile
           mkdir -p reports
           TEST_PATH="${{ github.event.inputs.test_path }}"
           if [ -z "$TEST_PATH" ]; then TEST_PATH='tests/amazon_tests.robot'; fi

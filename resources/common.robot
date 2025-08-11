@@ -7,12 +7,16 @@ Library    BuiltIn
 ${ENVIRONMENT}    dev
 ${BROWSER}    chrome
 ${TIMEOUT}    10s
-${CHROME ARGS STRING}    Get Environment Variable    SELENIUM_CHROME_ARGS    ''
+
 *** Keywords ***
 Abrir o navegador
-    [Documentation]    Abre o navegador Chrome e maximiza a janela
+    [Documentation]    Abre o navegador Chrome e maximiza a janela, passando argumentos do Chrome se existirem
     [Arguments]    ${url}
-    Open Browser    ${url}    chrome
+    ${chrome_args_string}=    Get Environment Variable    SELENIUM_CHROME_ARGS    ''
+    Run Keyword If    '${chrome_args_string}' == ''    Open Browser    ${url}    chrome
+    ...    ELSE
+    ...    ${args_list}=    Split String    ${chrome_args_string}    separator=space
+    ...    Open Browser    ${url}    chrome    options=${args_list}
     Maximize Browser Window
     Set Selenium Timeout    ${TIMEOUT}
 
@@ -33,4 +37,4 @@ Verificar se elemento está visível
 
 Tirar screenshot em caso de erro
     [Documentation]    Tira screenshot quando um teste falha
-    Capture Page Screenshot    filename=erro_{index}.png 
+    Capture Page Screenshot    filename=erro_{index}.png
