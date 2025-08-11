@@ -12,11 +12,7 @@ ${CHROME ARGS STRING}    Get Environment Variable    SELENIUM_CHROME_ARGS    ''
 Abrir o navegador
     [Documentation]    Abre o navegador Chrome e maximiza a janela
     [Arguments]    ${url}
-    ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
-    ${tmpdir}=    Evaluate    __import__('tempfile').mkdtemp()    # Python
-    ${user_data_dir}=    Catenate    --user-data-dir=    ${tmpdir}
-    Call Method    ${options}    add_argument    ${user_data_dir}
-    Open Browser    ${url}    chrome    options=${options}
+    Open Browser    ${url}    chrome
     Maximize Browser Window
     Set Selenium Timeout    ${TIMEOUT}
 

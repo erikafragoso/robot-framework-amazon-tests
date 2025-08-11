@@ -7,6 +7,7 @@ Resource    ../resources/amazon_page.robot
 
 *** Variables ***
 ${ENVIRONMENT}    dev
+${URL}    https://www.amazon.com.br
 
 *** Test Cases ***
 # ===== TESTES DE SMOKE =====
