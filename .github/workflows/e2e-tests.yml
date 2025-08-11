@@ -47,8 +47,8 @@ jobs:
 
       - name: Set up ChromeDriver manually
         run: |
-          # Download and install ChromeDriver 138 (compatible with Chrome 138)
-          wget -O chromedriver.zip https://chromedriver.storage.googleapis.com/138.0.7204.183/chromedriver_linux64.zip
+          # Download and install ChromeDriver 114 (compatible with older Chrome versions)
+          wget -O chromedriver.zip https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
           unzip chromedriver.zip
           sudo mv chromedriver /usr/local/bin/
           sudo chmod +x /usr/local/bin/chromedriver
