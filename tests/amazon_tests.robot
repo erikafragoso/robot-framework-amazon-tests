@@ -56,7 +56,3 @@ Teste de Carregamento Rápido
     [Teardown]    Fechar o navegador
     
     Acessar a home page do site Amazon.com.br 
-
-Test Split String
-    ${result}=    Split String    a b c    ${SPACE}
-    Log    ${result} 

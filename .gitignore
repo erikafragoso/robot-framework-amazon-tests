@@ -40,3 +40,5 @@ env/
 .idea/
 *.swp
 *.swo 
+
+tmp/
