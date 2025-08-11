@@ -2,6 +2,7 @@
 Library    SeleniumLibrary
 Resource    amazon_page.robot
 Library    BuiltIn
+Library    OperatingSystem
 
 *** Variables ***
 ${ENVIRONMENT}    dev
@@ -12,7 +13,7 @@ ${TIMEOUT}    10s
 Abrir o navegador
     [Documentation]    Abre o navegador Chrome e maximiza a janela, passando argumentos do Chrome se existirem
     [Arguments]    ${url}
-    ${chrome_args_string}=    Get Environment Variable    SELENIUM_CHROME_ARGS    ''
+   ${CHROME ARGS STRING}=    Evaluate    os.getenv("SELENIUM_CHROME_ARGS", "")    modules=os
     Run Keyword If    '${chrome_args_string}' == ''    Open Browser    ${url}    chrome
     ...    ELSE
     ...    ${args_list}=    Split String    ${chrome_args_string}    separator=space
