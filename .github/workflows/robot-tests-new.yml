@@ -37,11 +37,12 @@ jobs:
         
     - name: Install ChromeDriver
       run: |
-        CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | awk -F'.' '{print $1}')
-        CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
-        wget -O /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
-        sudo unzip /tmp/chromedriver.zip -d /usr/local/bin/
-        sudo chmod +x /usr/local/bin/chromedriver
+        python -m pip install --user webdriver-manager
+        CHROMEDRIVER_PATH=$(python -c "from webdriver_manager.chrome import ChromeDriverManager; print(ChromeDriverManager().install())")
+        mkdir -p "$HOME/.local/bin"
+        ln -sf "$CHROMEDRIVER_PATH" "$HOME/.local/bin/chromedriver"
+        chmod +x "$HOME/.local/bin/chromedriver"
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
         chromedriver --version
         
     - name: Install Python dependencies
@@ -53,6 +54,7 @@ jobs:
         
     - name: Run Smoke Tests
       run: |
+        mkdir -p results
         robot --outputdir results --timestampoutputs --include smoke tests/amazon_tests.robot
         
     - name: Upload test results
@@ -91,11 +93,12 @@ jobs:
         
     - name: Install ChromeDriver
       run: |
-        CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | awk -F'.' '{print $1}')
-        CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
-        wget -O /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
-        sudo unzip /tmp/chromedriver.zip -d /usr/local/bin/
-        sudo chmod +x /usr/local/bin/chromedriver
+        python -m pip install --user webdriver-manager
+        CHROMEDRIVER_PATH=$(python -c "from webdriver_manager.chrome import ChromeDriverManager; print(ChromeDriverManager().install())")
+        mkdir -p "$HOME/.local/bin"
+        ln -sf "$CHROMEDRIVER_PATH" "$HOME/.local/bin/chromedriver"
+        chmod +x "$HOME/.local/bin/chromedriver"
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
         chromedriver --version
         
     - name: Install Python dependencies
@@ -107,6 +110,7 @@ jobs:
         
     - name: Run Regression Tests
       run: |
+        mkdir -p results
         robot --outputdir results --timestampoutputs --include regressao tests/amazon_tests.robot
         
     - name: Upload test results
