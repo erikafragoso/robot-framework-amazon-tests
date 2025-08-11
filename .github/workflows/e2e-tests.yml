@@ -40,10 +40,20 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y xvfb
 
-      - name: Set up Chrome
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: 137
+      - name: Set up Chrome and ChromeDriver
+        run: |
+          # Install Chrome 136
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable=136.0.6776.0-1
+          sudo apt-mark hold google-chrome-stable
+          
+          # Install ChromeDriver 136
+          wget -O chromedriver.zip https://chromedriver.storage.googleapis.com/136.0.6776.0/chromedriver_linux64.zip
+          unzip chromedriver.zip
+          sudo mv chromedriver /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver
 
       - name: Install Python dependencies
         run: |
