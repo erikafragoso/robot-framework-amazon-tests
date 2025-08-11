@@ -45,15 +45,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Set up ChromeDriver via webdriver-manager
+      - name: Set up ChromeDriver manually
         run: |
-          # Force webdriver-manager to use a compatible ChromeDriver version
-          export CHROMEDRIVER_VERSION=114.0.5735.90
-          python -c "
-          from webdriver_manager.chrome import ChromeDriverManager
-          driver_path = ChromeDriverManager(version='$CHROMEDRIVER_VERSION').install()
-          print(f'ChromeDriver installed at: {driver_path}')
-          "
+          # Download and install ChromeDriver 114 (compatible with older Chrome versions)
+          wget -O chromedriver.zip https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
+          unzip chromedriver.zip
+          sudo mv chromedriver /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver
+          chromedriver --version
 
       - name: Run Robot Framework tests
         env:
