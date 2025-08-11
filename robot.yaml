@@ -16,6 +16,6 @@ robot:
     TIMEOUT: 10s
   
   # Configurações de relatório
-  report: report.html
-  log: log.html
-  output: output.xml 
+  report: results/report.html
+  log: results/log.html
+  output: results/output.xml 
