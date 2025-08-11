@@ -54,18 +54,14 @@ jobs:
           print(f'ChromeDriver installed at: {driver_path}')
           "
 
-      - name: Install older Chrome version
+      - name: Install older Chrome via snap
         run: |
-          # Install Chrome 135 (more compatible with Selenium 4.26.1)
-          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable=135.0.6776.0-1
-          sudo apt-mark hold google-chrome-stable
+          # Install Chrome via snap (usually has older, more stable versions)
+          sudo snap install chromium --classic
           echo "Chrome version installed:"
-          google-chrome --version
+          chromium --version
           echo "Chrome binary path:"
-          which google-chrome
+          which chromium
           echo "ChromeDriver version:"
           chromedriver --version
 
