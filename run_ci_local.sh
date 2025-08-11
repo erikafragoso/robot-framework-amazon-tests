@@ -33,8 +33,11 @@ python3 -m pip install --user robotframework robotframework-seleniumlibrary robo
 
 # 4. Configurar opções do Chrome
 echo "Configurando opções do Chrome..."
-mkdir -p /tmp/chrome-profile
-export SELENIUM_CHROME_ARGS="--headless=new --no-sandbox --disable-dev-shm-usage --user-data-dir=/tmp/chrome-profile"
+# Cria diretório de perfil único para evitar lock em execuções concorrentes
+CHROME_PROFILE_DIR=$(mktemp -d -t chrome-profile-XXXXXX)
+export SELENIUM_CHROME_ARGS="--headless=new --no-sandbox --disable-dev-shm-usage --user-data-dir=${CHROME_PROFILE_DIR}"
+# Limpa o diretório de perfil ao finalizar
+trap 'rm -rf "${CHROME_PROFILE_DIR}"' EXIT
 
 # 5. Executar os testes (smoke e regressão)
 echo "Executando testes SMOKE..."

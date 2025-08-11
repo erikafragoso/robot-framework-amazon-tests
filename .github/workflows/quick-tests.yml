@@ -46,7 +46,11 @@ jobs:
         chromedriver --version
         
     - name: Run Quick Tests
+      env:
+        SELENIUM_CHROME_ARGS: "--headless=new --no-sandbox --disable-dev-shm-usage --user-data-dir=${{ env.CHROME_PROFILE_DIR }}"
       run: |
+        CHROME_PROFILE_DIR=$(mktemp -d -t chrome-profile-XXXXXX)
+        echo "CHROME_PROFILE_DIR=${CHROME_PROFILE_DIR}" >> $GITHUB_ENV
         mkdir -p results
         robot --outputdir results --timestampoutputs --include prioridade_alta tests/amazon_tests.robot
         

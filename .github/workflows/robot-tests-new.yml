@@ -53,7 +53,11 @@ jobs:
         pip install robotframework-robocop==3.0.0
         
     - name: Run Smoke Tests
+      env:
+        SELENIUM_CHROME_ARGS: "--headless=new --no-sandbox --disable-dev-shm-usage --user-data-dir=${{ env.CHROME_PROFILE_DIR }}"
       run: |
+        CHROME_PROFILE_DIR=$(mktemp -d -t chrome-profile-XXXXXX)
+        echo "CHROME_PROFILE_DIR=${CHROME_PROFILE_DIR}" >> $GITHUB_ENV
         mkdir -p results
         robot --outputdir results --timestampoutputs --include smoke tests/amazon_tests.robot
         
@@ -109,7 +113,11 @@ jobs:
         pip install robotframework-robocop==3.0.0
         
     - name: Run Regression Tests
+      env:
+        SELENIUM_CHROME_ARGS: "--headless=new --no-sandbox --disable-dev-shm-usage --user-data-dir=${{ env.CHROME_PROFILE_DIR }}"
       run: |
+        CHROME_PROFILE_DIR=$(mktemp -d -t chrome-profile-XXXXXX)
+        echo "CHROME_PROFILE_DIR=${CHROME_PROFILE_DIR}" >> $GITHUB_ENV
         mkdir -p results
         robot --outputdir results --timestampoutputs --include regressao tests/amazon_tests.robot
         

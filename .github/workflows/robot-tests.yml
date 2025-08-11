@@ -47,14 +47,15 @@ jobs:
         
     - name: Set Chrome Options
       run: |
-        mkdir -p /tmp/chrome-profile
-        echo "--headless=new --no-sandbox --disable-dev-shm-usage --user-data-dir=/tmp/chrome-profile" > chrome-options.txt
+        CHROME_PROFILE_DIR=$(mktemp -d -t chrome-profile-XXXXXX)
+        echo "--headless=new --no-sandbox --disable-dev-shm-usage --user-data-dir=${CHROME_PROFILE_DIR}" > chrome-options.txt
+        echo "CHROME_PROFILE_DIR=${CHROME_PROFILE_DIR}" >> $GITHUB_ENV
       shell: bash
 
     - name: Run Smoke Tests
       env:
         ROBOT_SYSLOG_FILE: /tmp/robot_syslog.txt
-        SELENIUM_CHROME_ARGS: "--headless=new --no-sandbox --disable-dev-shm-usage --user-data-dir=/tmp/chrome-profile"
+        SELENIUM_CHROME_ARGS: "--headless=new --no-sandbox --disable-dev-shm-usage --user-data-dir=${{ env.CHROME_PROFILE_DIR }}"
       run: |
         mkdir -p results
         robot --outputdir results --timestampoutputs --include smoke tests/amazon_tests.robot
@@ -105,14 +106,15 @@ jobs:
         
     - name: Set Chrome Options
       run: |
-        mkdir -p /tmp/chrome-profile
-        echo "--headless=new --no-sandbox --disable-dev-shm-usage --user-data-dir=/tmp/chrome-profile" > chrome-options.txt
+        CHROME_PROFILE_DIR=$(mktemp -d -t chrome-profile-XXXXXX)
+        echo "--headless=new --no-sandbox --disable-dev-shm-usage --user-data-dir=${CHROME_PROFILE_DIR}" > chrome-options.txt
+        echo "CHROME_PROFILE_DIR=${CHROME_PROFILE_DIR}" >> $GITHUB_ENV
       shell: bash
 
     - name: Run Regression Tests
       env:
         ROBOT_SYSLOG_FILE: /tmp/robot_syslog.txt
-        SELENIUM_CHROME_ARGS: "--headless=new --no-sandbox --disable-dev-shm-usage --user-data-dir=/tmp/chrome-profile"
+        SELENIUM_CHROME_ARGS: "--headless=new --no-sandbox --disable-dev-shm-usage --user-data-dir=${{ env.CHROME_PROFILE_DIR }}"
       run: |
         mkdir -p results
         robot --outputdir results --timestampoutputs --include regressao tests/amazon_tests.robot
