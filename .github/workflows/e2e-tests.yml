@@ -54,6 +54,25 @@ jobs:
           print(f'ChromeDriver installed at: {driver_path}')
           "
 
+      - name: Install older Chrome version
+        run: |
+          # Install Chrome 135 (more compatible with Selenium 4.26.1)
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable=135.0.6776.0-1
+          sudo apt-mark hold google-chrome-stable
+          echo "Chrome version installed:"
+          google-chrome --version
+          echo "Chrome binary path:"
+          which google-chrome
+          echo "ChromeDriver version:"
+          chromedriver --version
+
+      - name: Install Selenium
+        run: |
+          pip install selenium==4.26.1
+            
       - name: Run Robot Framework tests
         env:
           CI: true
