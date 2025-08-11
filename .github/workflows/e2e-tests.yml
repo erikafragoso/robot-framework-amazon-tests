@@ -23,6 +23,7 @@ on:
 
 jobs:
   tests:
+    name: E2E Testes - Robot Framework
     runs-on: ubuntu-latest
 
     steps:

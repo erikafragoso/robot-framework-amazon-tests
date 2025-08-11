@@ -1,5 +1,5 @@
 robotframework==7.3.2
 robotframework-seleniumlibrary==6.2.0
 robotframework-robocop==3.0.0
-selenium==4.15.2
-webdriver-manager==4.0.1 
+selenium==4.26.1
+webdriver-manager==4.0.1
